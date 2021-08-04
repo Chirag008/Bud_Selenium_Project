@@ -1,0 +1,6 @@
+selenium
+pytest-html
+allure-pytest
+pytest-order
+pytest-soft-assertions
+datetime

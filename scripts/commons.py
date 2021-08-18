@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 from selenium.common.exceptions import TimeoutException
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -49,10 +52,24 @@ class Common_Utils():
         script = 'return arguments[0].checked;'
         return driver.execute_script(script, element)
 
+    def pixel_to_pts(self, pixels):
+        pixels = float(pixels.replace('px', ''))
+        return str(int(pixels * 72 / 96)) + 'pt'
+
+    def pts_to_pixels(self, pts):
+        return pts * 96 / 72
+
     @staticmethod
     def get_browser_instance():
         if Common_Utils.driver is None:
             options = webdriver.ChromeOptions()
             options.add_experimental_option('excludeSwitches', ['enable-logging'])
-            Common_Utils.driver = webdriver.Chrome(executable_path='./drivers/chromedriver.exe', options=options)
+            ROOT_DIR = Path(__file__).parent.parent
+            chromedriver_path = os.path.join(ROOT_DIR, 'drivers\\chromedriver.exe')
+            Common_Utils.driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
         return Common_Utils.driver
+
+    @staticmethod
+    def kill_browser_instance():
+        Common_Utils.driver.close()
+        Common_Utils.driver = None

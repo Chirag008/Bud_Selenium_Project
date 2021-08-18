@@ -15,10 +15,10 @@ import allure
 from reporter.HtmlReporter import HtmlReporter
 
 
-class ReportTester(unittest.TestCase):
+class CUAI_Home_Equity_Analysis_Power_BI(unittest.TestCase):
     utils = Common_Utils()
     driver = utils.get_browser_instance()
-    reporter = HtmlReporter(report_name='Automation Report -- 60+ Delinquency Report')
+    reporter = HtmlReporter(report_name='Automation Report -- CUAI Home Equity Analysis')
     validations_failed_count = 0
 
     def validate_result(self, scenario_name,
@@ -36,33 +36,33 @@ class ReportTester(unittest.TestCase):
                                           status, comment)
         # assert exp_result == actual_result
 
-
     @pytest.mark.order(1)
     def test_report_title(self):
         try:
-            self.driver.get(config.report_url)
+            # self.driver.get(config.report_url)
             self.driver.maximize_window()
+            #
+            # # sign in to PowerBi account
+            # time.sleep(2)
+            # self.driver.find_element_by_xpath(locators.sign_in_button).click()
+            # time.sleep(2)
+            # self.driver.find_element_by_xpath(locators.sign_in_email_box).send_keys(creds.username)
+            # time.sleep(2)
+            # self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
+            # time.sleep(2)
+            # self.driver.find_element_by_xpath(locators.sign_in_password_box).send_keys(creds.password)
+            # time.sleep(2)
+            # self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
+            # time.sleep(2)
+            #
+            # # launch url again to go to report page
+            # self.driver.get(config.report_url)
 
-            # sign in to PowerBi account
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_button).click()
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_email_box).send_keys(creds.username)
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_password_box).send_keys(creds.password)
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
-            time.sleep(2)
-
-            # launch url again to go to report page
-            self.driver.get(config.report_url)
-
+            self.driver.get("file:///C:/Users/Chirag/Downloads/morereports/CUAI - Home Equity Analysis - Power BI.html")
             # wait for report to display
             ele_report_title = self.utils.wait_and_get_element(
                 driver=self.driver,
-                locator=locators.delinquency_report_title,
+                locator=locators.home_equity_report_title,
                 timeout=40
             )
             # waiting for report to appear on page
@@ -70,7 +70,7 @@ class ReportTester(unittest.TestCase):
             print('report title is - {}'.format(ele_report_title.text))
             # assert ele_report_title.text.strip() == config.report_title, 'Report title not matched!'
 
-            self.validate_result('Validate report title', config.report_title, ele_report_title.text.strip())
+            self.validate_result('Validate report title', config.home_equity_report_title, ele_report_title.text.strip())
 
             with allure.step('Capturing screenshot'):
                 allure.attach(self.driver.get_screenshot_as_png(), name='Screenshot',
@@ -90,7 +90,7 @@ class ReportTester(unittest.TestCase):
                                                       by=By.CSS_SELECTOR, timeout=40)
             actual_background_color = self.utils.get_property_using_js(driver=self.driver, element=element,
                                                                        property_name='background-color')
-            actual_background_color = Color.from_string(actual_background_color).hex
+            actual_background_color = Color.from_string(actual_background_color).hex.upper()
 
             # E7EAEC  -- (231, 234, 236)
             expected_background_color = '#E7EAEC'
@@ -120,7 +120,7 @@ class ReportTester(unittest.TestCase):
         try:
             header = self.utils.wait_and_get_element(self.driver, locators.report_header, by=By.XPATH)
             actual_font_size = self.utils.get_property_using_js(self.driver, header, 'font-size')
-            actual_font_size = str(int(actual_font_size.replace('px', ''))*72/96) + 'pts'
+            actual_font_size = str(int(int(actual_font_size.replace('px', '')) * 72 / 96)) + 'pts'
             actual_font_family = self.utils.get_property_using_js(self.driver, header, 'font-family')
             actual_color = self.utils.get_property_using_js(self.driver, header, 'color')
             actual_color = Color.from_string(actual_color).hex
@@ -164,23 +164,46 @@ class ReportTester(unittest.TestCase):
         try:
             visuals = self.driver.find_elements_by_xpath(locators.visuals)
             for index, visual in enumerate(visuals):
-                visual_title = visual.find_element_by_xpath('.//div[contains(@class,"visualTitle")]')
+
                 container = visual.find_element_by_xpath('.//div[contains(@class, "vcBody")]')
 
                 border_color = container.value_of_css_property('border-color')
-                border_color = Color.from_string(border_color).hex
+                border_color = Color.from_string(border_color).hex.upper()
 
                 box_shadow = container.value_of_css_property('box-shadow')
                 pattern = 'rgba\((\d+),\s(\d+),\s(\d+).*'
-                rgb = re.search(pattern, box_shadow)
-                box_shadow = f'rgb({rgb.group(1)},{rgb.group(2)},{rgb.group(3)})'
-                box_shadow_color = Color.from_string(box_shadow).hex
+                if re.match(pattern, box_shadow):
+                    rgb = re.search(pattern, box_shadow)
+                    box_shadow = f'rgb({rgb.group(1)},{rgb.group(2)},{rgb.group(3)})'
+                    box_shadow_color = Color.from_string(box_shadow).hex.upper()
+                else:
+                    box_shadow_color = box_shadow
 
                 background_color = self.utils.get_property_using_js(self.driver, visual, 'background-color')
-                background_color = Color.from_string(background_color).hex
+                background_color = Color.from_string(background_color).hex.upper()
 
-                visual_title_color = visual_title.value_of_css_property('color')
-                visual_title_color = Color.from_string(visual_title_color).hex
+                self.validate_result(f'Visual - {index + 1} [verify visual border radius]', '12px',
+                                     container.value_of_css_property('border-radius'))
+                self.validate_result(f'Visual - {index + 1} [verify visual border color]', '#576975', border_color)
+                self.validate_result(f'Visual - {index + 1} [verify visual border shadow color]', '#B3B3B3',
+                                     box_shadow_color)
+                self.validate_result(f'Visual - {index + 1} [verify visual background color]', '#FBFBFB',
+                                     background_color)
+
+                # visual headers are off for buttons, slicers and report title
+                visual_titles = visual.find_elements_by_xpath('.//div[contains(@class,"visualTitle")]')
+                if len(visual_titles) > 0:
+                    visual_title = visual_titles[0]
+                    visual_title_color = visual_title.value_of_css_property('color')
+                    visual_title_color = Color.from_string(visual_title_color).hex
+                    self.validate_result(f'Visual - {index + 1} [verify visual title font size]', '14pt',
+                                         visual_title.value_of_css_property('font-size'))
+                    self.validate_result(f'Visual - {index + 1} [verify visual title font family]', 'GT America',
+                                         self.utils.get_property_using_js(self.driver, visual_title, 'font-family'))
+                    self.validate_result(f'Visual - {index + 1} [verify visual title color]', '#252423',
+                                         visual_title_color)
+                    self.validate_result(f'Visual - {index + 1} [verify visual title visibility]', 'visible',
+                                         visual_title.value_of_css_property('visibility'))
 
                 # assert visual_title.value_of_css_property('font-size') == '14pt', 'font size mismatched'
                 # assert visual_title.value_of_css_property('font-family') == 'GT America', 'font family mis-match'
@@ -191,21 +214,6 @@ class ReportTester(unittest.TestCase):
                 # assert border_color == '#576975'
                 # assert box_shadow_color == '#B3B3B3', 'box shadow mis-match'
                 # assert background_color == '#FBFBFB', 'background color mis-match'
-
-                self.validate_result(f'Visual - {index + 1} [verify visual title font size]', '14pt',
-                                     visual_title.value_of_css_property('font-size'))
-                self.validate_result(f'Visual - {index + 1} [verify visual title font family]', 'GT America',
-                                     self.utils.get_property_using_js(self.driver, visual_title, 'font-family'))
-                self.validate_result(f'Visual - {index + 1} [verify visual title color]', '#252423', visual_title_color)
-                self.validate_result(f'Visual - {index + 1} [verify visual title visibility]', 'visible',
-                                     visual_title.value_of_css_property('visibility'))
-                self.validate_result(f'Visual - {index + 1} [verify visual border radius]', '12px',
-                                     container.value_of_css_property('border-radius'))
-                self.validate_result(f'Visual - {index + 1} [verify visual border color]', '#576975', border_color)
-                self.validate_result(f'Visual - {index + 1} [verify visual border shadow color]', '#B3B3B3',
-                                     box_shadow_color)
-                self.validate_result(f'Visual - {index + 1} [verify visual background color]', '#FBFBFB',
-                                     background_color)
             assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
@@ -332,7 +340,7 @@ class ReportTester(unittest.TestCase):
     def test_tear_down(self):
         try:
             self.driver.close()
-            self.reporter.save_report()
+            self.reporter.save_report(report_name='CUAI_Home_Equity_Analysis.html')
 
             assert self.validations_failed_count == 0
         except Exception as error:
@@ -341,6 +349,5 @@ class ReportTester(unittest.TestCase):
             self.validate_result('Closing the browser', 'browser should be closed without any error', 'error occurred',
                                  f'error : {error.__repr__()}')
 
-
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()

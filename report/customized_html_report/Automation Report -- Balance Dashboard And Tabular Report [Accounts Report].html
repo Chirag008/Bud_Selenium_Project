@@ -1,0 +1,1205 @@
+<html>
+  <head>
+    <title>Automation Report</title>
+    <style type="text/css">
+    	.table-header{
+      	background-color:silver;
+      }
+
+      .page{
+      	background-color: cadetblue;
+      }
+
+      td.pass{
+      	color:green;
+        font-weight: bold;
+      }
+
+      td.fail{
+      	color:darkred;
+        font-weight: bold;
+      }
+
+      td.error{
+      	color:goldenrod;
+        font-weight: bold;
+      }
+
+      tr {
+      	text-align: center;
+        font-family: verdana,serif;
+      }
+
+      td {
+        padding: 10px;
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+
+      .summary-table {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      tr.summary-table-header{
+        background-color: goldenrod;
+        font-family: Verdana,serif;
+      }
+      td.summary-all{
+        font-weight: bold;
+        background-color: mediumslateblue;
+      }
+      td.summary-pass{
+        font-weight: bold;
+        background-color: darkgreen;
+      }
+      td.summary-fail{
+        font-weight: bold;
+        background-color: darkred;
+      }
+      td.summary-error{
+          font-weight: bold;
+          background-color: darkgoldenrod;
+      }
+
+      .scenario-filter-table{
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      td.radio{
+        padding: 10px;
+        border: none;
+        border-collapse: collapse;
+      }
+
+      .radio-big {
+        width: 1.5em; height: 1.5em;
+      }
+
+      td.meta-header{
+          font-weight: bold;
+          background-color: #A0655F;
+          padding: 2px;
+      }
+
+      td.meta-data{
+          background-color: #9FA05F;
+          padding: 2px;
+      }
+
+    </style>
+  </head>
+
+  <body class="page">
+    <br><br>
+    <div style="text-align: center; font-family: Verdana,serif; color:#a71d5d ">
+      <h2>Automation Report -- Balance Dashboard And Tabular Report [Accounts Report]</h2>
+    </div>
+    <div>
+      <br>
+      <div>
+        <table id="report-meta-data">
+            <tr id="meta-data-execution-time">
+               <td class="meta-header">Report Execution Time </td>
+               <td class="meta-data">2021-08-18 09:18:44</td>
+            </tr>
+            <tr id="meta-data-env">
+                <td class="meta-header">Environment </td>
+                <td class="meta-data">DEV</td>
+            </tr>
+        </table>
+    </div>
+    <br><br><br><br><br>
+    <div>
+      <table class="summary-table" style="width: 50%; alignment: center">
+        <tr class="summary-table-header">
+          <th>Total Scenarios</th>
+          <th>Total Passed</th>
+          <th>Total Failed</th>
+          <th>Total Error</th>
+        </tr>
+        
+<tr> 
+<td class="summary-all">110</td>
+<td class="summary-pass">70</td>
+<td class="summary-fail">38</td>
+<td class="summary-error">2</td>
+</tr>
+
+      </table>
+      </div>
+    <br><br><br><br>
+
+      <div>
+      <table class='scenario-filter-table' style="width: 50%">
+        <tr>
+          <td class="radio" style="width:34%">
+            <label class="radio-inline" style="color: darkblue; font-weight: bold;">
+              <input type="radio" name="scenario-filter" class="radio-big" onchange="filter_scenarios()" checked>All
+            </label>
+          </td>
+         <td class="radio" style="width:22%">
+           <label class="radio-inline" style="color: darkgreen; font-weight: bold;">
+                <input type="radio" name="scenario-filter" class="radio-big" onchange="filter_scenarios()">Pass
+           </label>
+         </td>
+         <td class="radio" style="width:22%">
+           <label class="radio-inline" style="color: darkred; font-weight: bold;">
+                <input type="radio" name="scenario-filter" class="radio-big" onchange="filter_scenarios()">Fail
+           </label>
+         </td>
+         <td class="radio" style="width:22%">
+           <label class="radio-inline" style="color: goldenrod; font-weight: bold;">
+                <input type="radio" name="scenario-filter" class="radio-big" onchange="filter_scenarios()">Error
+           </label>
+         </td>
+        </tr>
+      </table>
+      </div>
+
+        <br><br><br>
+
+    <table style="width:100%" id="report-data">
+      <tr class="table-header">
+        <th style="width:5%">Scenario No.</th>
+      	<th style="width:20%">Test Scenario</th>
+      	<th style="width:30%">Expected Output</th>
+        <th style="width:30%">Actual Output</th>
+        <th style="width:5%">Status</th>
+        <th style="width:10%">Comments</th>
+     </tr>
+     
+<tr class="error">
+<td>1</td>
+<td>Validating report tile </td>
+<td>Accounts Report</td>
+<td>NA</td>
+<td class="error">error</td>
+<td>Error occurred  : JavascriptException("javascript error: Unexpected token ')'\n  (Session info: chrome=92.0.4515.107)", None, None)</td>
+</tr>
+
+<tr class="pass">
+<td>2</td>
+<td>Report Background Color Validation</td>
+<td>#E7EAEC</td>
+<td>#E7EAEC</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>3</td>
+<td>Verifying opacity / transparency of Report background</td>
+<td>0%</td>
+<td>0%</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>4</td>
+<td>Report dashboard header title font family</td>
+<td>GT America</td>
+<td>GT America</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>5</td>
+<td>Report dashboard header title font size</td>
+<td>24pts</td>
+<td>24pts</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>6</td>
+<td>Report dashboard header title color</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>7</td>
+<td>Report dashboard header Relative X location</td>
+<td>24</td>
+<td>21</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>8</td>
+<td>Report dashboard header Relative Y location</td>
+<td>24</td>
+<td>11</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>9</td>
+<td>Report dashboard header height</td>
+<td>58</td>
+<td>36</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>10</td>
+<td>Visual - 1 [verify visual border radius]</td>
+<td>12px</td>
+<td>10px</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>11</td>
+<td>Visual - 1 [verify visual border color]</td>
+<td>#576975</td>
+<td>#F5F6FA</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>12</td>
+<td>Visual - 1 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>none</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>13</td>
+<td>Visual - 1 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>14</td>
+<td>Visual - 2 [verify visual border radius]</td>
+<td>12px</td>
+<td>10px</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>15</td>
+<td>Visual - 2 [verify visual border color]</td>
+<td>#576975</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>16</td>
+<td>Visual - 2 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>none</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>17</td>
+<td>Visual - 2 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>18</td>
+<td>Visual - 3 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>19</td>
+<td>Visual - 3 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>20</td>
+<td>Visual - 3 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>21</td>
+<td>Visual - 3 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>22</td>
+<td>Visual - 3 [verify visual title font size]</td>
+<td>14pt</td>
+<td>12pt</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>23</td>
+<td>Visual - 3 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>24</td>
+<td>Visual - 3 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>25</td>
+<td>Visual - 3 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>26</td>
+<td>Visual - 4 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>27</td>
+<td>Visual - 4 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>28</td>
+<td>Visual - 4 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>29</td>
+<td>Visual - 4 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>30</td>
+<td>Visual - 4 [verify visual title font size]</td>
+<td>14pt</td>
+<td>12pt</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>31</td>
+<td>Visual - 4 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>32</td>
+<td>Visual - 4 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>33</td>
+<td>Visual - 4 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>34</td>
+<td>Visual - 5 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>35</td>
+<td>Visual - 5 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>36</td>
+<td>Visual - 5 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>37</td>
+<td>Visual - 5 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>38</td>
+<td>Visual - 5 [verify visual title font size]</td>
+<td>14pt</td>
+<td>14pt</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>39</td>
+<td>Visual - 5 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>40</td>
+<td>Visual - 5 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>41</td>
+<td>Visual - 5 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>42</td>
+<td>Visual - 6 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>43</td>
+<td>Visual - 6 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>44</td>
+<td>Visual - 6 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>45</td>
+<td>Visual - 6 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>46</td>
+<td>Visual - 6 [verify visual title font size]</td>
+<td>14pt</td>
+<td>12pt</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>47</td>
+<td>Visual - 6 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>48</td>
+<td>Visual - 6 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>49</td>
+<td>Visual - 6 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>50</td>
+<td>Visual - 7 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>51</td>
+<td>Visual - 7 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>52</td>
+<td>Visual - 7 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>53</td>
+<td>Visual - 7 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>54</td>
+<td>Visual - 7 [verify visual title font size]</td>
+<td>14pt</td>
+<td>12pt</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>55</td>
+<td>Visual - 7 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>56</td>
+<td>Visual - 7 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>57</td>
+<td>Visual - 7 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>58</td>
+<td>Visual - 8 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>59</td>
+<td>Visual - 8 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>60</td>
+<td>Visual - 8 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>61</td>
+<td>Visual - 8 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>62</td>
+<td>Visual - 8 [verify visual title font size]</td>
+<td>14pt</td>
+<td>14pt</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>63</td>
+<td>Visual - 8 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>64</td>
+<td>Visual - 8 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>65</td>
+<td>Visual - 8 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>66</td>
+<td>Visual - 9 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>67</td>
+<td>Visual - 9 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>68</td>
+<td>Visual - 9 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>69</td>
+<td>Visual - 9 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>70</td>
+<td>Visual - 9 [verify visual title font size]</td>
+<td>14pt</td>
+<td>14pt</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>71</td>
+<td>Visual - 9 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>72</td>
+<td>Visual - 9 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>73</td>
+<td>Visual - 9 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>74</td>
+<td>Visual - 10 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>75</td>
+<td>Visual - 10 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>76</td>
+<td>Visual - 10 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>77</td>
+<td>Visual - 10 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>78</td>
+<td>Visual - 10 [verify visual title font size]</td>
+<td>14pt</td>
+<td>14pt</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>79</td>
+<td>Visual - 10 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>80</td>
+<td>Visual - 10 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>81</td>
+<td>Visual - 10 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>82</td>
+<td>Visual - 11 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>83</td>
+<td>Visual - 11 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>84</td>
+<td>Visual - 11 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>85</td>
+<td>Visual - 11 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>86</td>
+<td>Visual - 11 [verify visual title font size]</td>
+<td>14pt</td>
+<td>14pt</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>87</td>
+<td>Visual - 11 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>88</td>
+<td>Visual - 11 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>89</td>
+<td>Visual - 11 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>90</td>
+<td>Visual - 12 [verify visual border radius]</td>
+<td>12px</td>
+<td>12px</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>91</td>
+<td>Visual - 12 [verify visual border color]</td>
+<td>#576975</td>
+<td>#576975</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>92</td>
+<td>Visual - 12 [verify visual border shadow color]</td>
+<td>#B3B3B3</td>
+<td>#B3B3B3</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>93</td>
+<td>Visual - 12 [verify visual background color]</td>
+<td>#FBFBFB</td>
+<td>#000000</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>94</td>
+<td>Visual - 12 [verify visual title font size]</td>
+<td>14pt</td>
+<td>14pt</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>95</td>
+<td>Visual - 12 [verify visual title font family]</td>
+<td>GT America</td>
+<td>Segoe UI</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>96</td>
+<td>Visual - 12 [verify visual title color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>97</td>
+<td>Visual - 12 [verify visual title visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>98</td>
+<td>Slicer - 1 [verify slicer header color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>99</td>
+<td>Slicer - 1 [verify slicer header font size]</td>
+<td>12px</td>
+<td>16px</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>100</td>
+<td>Slicer - 1 [verify slicer header font family]</td>
+<td>GT America</td>
+<td>GT America</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>101</td>
+<td>Slicer - 1 [verify slicer header visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>102</td>
+<td>Slicer - 2 [verify slicer header color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>103</td>
+<td>Slicer - 2 [verify slicer header font size]</td>
+<td>12px</td>
+<td>16px</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>104</td>
+<td>Slicer - 2 [verify slicer header font family]</td>
+<td>GT America</td>
+<td>GT America</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>105</td>
+<td>Slicer - 2 [verify slicer header visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>106</td>
+<td>Slicer - 3 [verify slicer header color]</td>
+<td>#252423</td>
+<td>#252423</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>107</td>
+<td>Slicer - 3 [verify slicer header font size]</td>
+<td>12px</td>
+<td>16px</td>
+<td class="fail">fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>108</td>
+<td>Slicer - 3 [verify slicer header font family]</td>
+<td>GT America</td>
+<td>GT America</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>109</td>
+<td>Slicer - 3 [verify slicer header visibility]</td>
+<td>visible</td>
+<td>visible</td>
+<td class="pass">pass</td>
+<td></td>
+</tr>
+
+<tr class="error">
+<td>110</td>
+<td>Validating multiselect with CTRL is On in slicer</td>
+<td>ON</td>
+<td>NA</td>
+<td class="error">error</td>
+<td>Error occurred  : IndexError('list index out of range')</td>
+</tr>
+
+    </table>
+    </div>
+
+    <script>
+      function filter_scenarios() {
+        const radios = document.getElementsByName("scenario-filter");
+        const data_table = document.getElementById("report-data");
+        const rows = data_table.getElementsByTagName("tr");
+        if(radios[0].checked){
+          for(let i=1; i<rows.length; i++){
+              rows[i].style.display = "table-row";
+          }
+        }else if(radios[1].checked){
+          for(let i=1; i<rows.length; i++){
+            if(rows[i].className==="pass") {
+              rows[i].style.display = "table-row";
+            }else{
+              rows[i].style.display = "none";
+            }
+          }
+        }else if(radios[2].checked){
+          for(let i=1; i<rows.length; i++){
+            if(rows[i].className==="fail") {
+              rows[i].style.display = "table-row";
+            }else{
+              rows[i].style.display = "none";
+            }
+          }
+        }else{
+            for(let i=1; i<rows.length; i++){
+            if(rows[i].className==="error") {
+              rows[i].style.display = "table-row";
+            }else{
+              rows[i].style.display = "none";
+            }
+          }
+        }
+
+      }
+    </script>
+  </body>
+
+</html>

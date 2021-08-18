@@ -18,7 +18,7 @@ class HtmlReporter:
     env = None
     execution_time = None
 
-    def __init__(self, report_name='Automation Report', environment='DEV'):
+    def __init__(self, report_name='Automation Report.html', environment='DEV'):
         super()
         project_root = Path(os.path.abspath(os.path.dirname(__file__))).parent
         file_path = os.path.join(project_root, 'template.html')
@@ -57,19 +57,19 @@ class HtmlReporter:
                       f'</tr>\n'
         self.data = self.data + current_row
 
-    def save_report(self, report_file_path='report/customized_html_report', report_name='report.html'):
+    def save_report(self, report_file_path='report/customized_html_report'):
 
-        project_root = Path(os.path.abspath(os.path.dirname(__file__))).parent
+        project_root = Path(__file__).parent.parent
         report_file_dir = os.path.join(project_root, report_file_path)
-        if not os.path.exists(report_file_path):
+        if not os.path.exists(report_file_dir):
             os.makedirs(report_file_dir)
-        report_file_path = os.path.join(report_file_dir, report_name)
+        report_file_path = os.path.join(report_file_dir, self.report_name)
         self.final_report_text = self.final_report_text.replace(self.text_to_replace_execution_data,
                                                                 self.data) \
             .replace(self.text_to_replace_execution_time,
                      self.execution_time)\
             .replace(self.text_to_replace_env, self.env)\
-            .replace(self.text_to_replace_report_name, self.report_name)
+            .replace(self.text_to_replace_report_name, self.report_name.replace('.html', ''))
 
         summary_table_data = f'\n<tr> \n' \
                              f'<td class="summary-all">{self.scenario_number}</td>\n' \

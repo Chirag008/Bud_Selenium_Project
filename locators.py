@@ -3,7 +3,8 @@ sign_in_email_box = "//*[@id='i0116']"
 sign_in_password_box = "//*[@id='i0118']"
 sign_in_next_button = "//*[@id='idSIButton9']"
 delinquency_report_title = "//span[text()='60+ Delinquency Report ']"
-page_background = ".displayArea.disableAnimations.fitToPage"  # css selector
+home_equity_report_title = "//span[starts-with(text(), 'Home Equity')]"
+page_background = ".backgroundContainer.visualBackgroundContainer.themableBackgroundColorSolid"  # css selector
 # report_header = "//span[@class = 'textRun']/parent::p/parent::div"
 report_header = "//span[@class = 'textRun']"
 visual_container = "visualContainerHost"  # class name

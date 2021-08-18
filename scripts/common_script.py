@@ -15,11 +15,20 @@ import allure
 from reporter.HtmlReporter import HtmlReporter
 
 
-class ReportTester(unittest.TestCase):
-    utils = Common_Utils()
-    driver = utils.get_browser_instance()
-    reporter = HtmlReporter(report_name='Automation Report -- 60+ Delinquency Report')
+class CommonScript(unittest.TestCase):
+    # utils = Common_Utils()
+    # driver = utils.get_browser_instance()
+    # reporter = HtmlReporter(report_name='Automation Report -- CUAI Home Equity Analysis')
     validations_failed_count = 0
+
+    def __init__(self, url, report_title, automation_report_name):
+        super().__init__()
+        self.url = url
+        self.report_title = report_title
+        self.utils = Common_Utils()
+        self.driver = self.utils.get_browser_instance()
+        self.automation_report_name = automation_report_name
+        self.reporter = HtmlReporter(report_name=automation_report_name)
 
     def validate_result(self, scenario_name,
                         exp_result,
@@ -36,61 +45,103 @@ class ReportTester(unittest.TestCase):
                                           status, comment)
         # assert exp_result == actual_result
 
+    def test_initializer(self):
+        self.validations_failed_count = 0
+
+    def execute_tests(self):
+        self.login_and_load_report_page()
+        # check if tabs are present -- if so, then iterate through each tab
+        # Click the tab and wait to load the data, then execute all the tests
+        tabs = self.driver.find_elements_by_xpath(
+            "//div[contains(@class, 'explorationContainer')]//mat-list[@focus-nav-mode='Group']//li")
+        if len(tabs) > 0:
+            for tab in tabs:
+                self.report_title = tab.find_element_by_xpath(".//span").text
+                # Initialize the reporter again to capture report for this tab only
+                self.automation_report_name = self.automation_report_name.replace('.html', '')
+                self.reporter = HtmlReporter(report_name=self.automation_report_name + ' [' + self.report_title + '].html')
+
+                # click the tab and wait for 10 seconds to load the page
+                tab.click()
+                time.sleep(10)
+
+                self.test_report_title()
+                self.test_page_background()
+                self.test_all_report_dashboard_header_title()
+                self.test_border_and_shadow_of_visuals()
+                self.test_title_of_slicers_on_the_top()
+                self.test_multiselect_for_slicers_on_the_top()
+                self.reporter.save_report()
+            self.exit_browser()
+        else:
+            self.test_report_title()
+            self.test_page_background()
+            self.test_all_report_dashboard_header_title()
+            self.test_border_and_shadow_of_visuals()
+            self.test_title_of_slicers_on_the_top()
+            self.test_multiselect_for_slicers_on_the_top()
+            self.test_tear_down()
+
+    def login_and_load_report_page(self):
+        # self.driver.get(self.url)
+        self.driver.maximize_window()
+        #
+        # # sign in to PowerBi account
+        # time.sleep(2)
+        # self.driver.find_element_by_xpath(locators.sign_in_button).click()
+        # time.sleep(2)
+        # self.driver.find_element_by_xpath(locators.sign_in_email_box).send_keys(creds.username)
+        # time.sleep(2)
+        # self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
+        # time.sleep(2)
+        # self.driver.find_element_by_xpath(locators.sign_in_password_box).send_keys(creds.password)
+        # time.sleep(2)
+        # self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
+        # time.sleep(2)
+        #
+        # # launch url again to go to report page
+        self.driver.get(self.url)
 
     @pytest.mark.order(1)
     def test_report_title(self):
         try:
-            self.driver.get(config.report_url)
-            self.driver.maximize_window()
-
-            # sign in to PowerBi account
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_button).click()
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_email_box).send_keys(creds.username)
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_password_box).send_keys(creds.password)
-            time.sleep(2)
-            self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
-            time.sleep(2)
-
-            # launch url again to go to report page
-            self.driver.get(config.report_url)
+            self.test_initializer()
 
             # wait for report to display
+            locator_report_title = "//span[normalize-space(text()) = '" + self.report_title + "'][not(ancestor::ul)]"
             ele_report_title = self.utils.wait_and_get_element(
                 driver=self.driver,
-                locator=locators.delinquency_report_title,
-                timeout=40
+                locator=locator_report_title,
+                timeout=2
             )
             # waiting for report to appear on page
-            time.sleep(5)
+            # time.sleep(5)
             print('report title is - {}'.format(ele_report_title.text))
             # assert ele_report_title.text.strip() == config.report_title, 'Report title not matched!'
 
-            self.validate_result('Validate report title', config.report_title, ele_report_title.text.strip())
+            self.validate_result('Validate report title', config.home_equity_report_title,
+                                 ele_report_title.text.strip())
 
             with allure.step('Capturing screenshot'):
                 allure.attach(self.driver.get_screenshot_as_png(), name='Screenshot',
                               attachment_type=allure.attachment_type.PNG)
-            assert self.validations_failed_count == 0
+            # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
-            self.validate_result('Validating report tile ', config.report_title, 'NA',
+            self.validate_result('Validating report tile ', self.report_title, 'NA',
                                  f'Error occurred  : {error.__repr__()}')
 
     @pytest.mark.order(2)
     def test_page_background(self):
         try:
+            self.test_initializer()
             element = self.utils.wait_and_get_element(driver=self.driver,
                                                       locator=locators.page_background,
                                                       by=By.CSS_SELECTOR, timeout=40)
             actual_background_color = self.utils.get_property_using_js(driver=self.driver, element=element,
                                                                        property_name='background-color')
-            actual_background_color = Color.from_string(actual_background_color).hex
+            actual_background_color = Color.from_string(actual_background_color).hex.upper()
 
             # E7EAEC  -- (231, 234, 236)
             expected_background_color = '#E7EAEC'
@@ -108,7 +159,7 @@ class ReportTester(unittest.TestCase):
             #     assert actual_transparency == expected_transparency, 'Transparency value mismatched'
             self.validate_result('Verifying opacity / transparency of Report background', expected_transparency,
                                  actual_transparency)
-            assert self.validations_failed_count == 0
+            # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
@@ -118,9 +169,10 @@ class ReportTester(unittest.TestCase):
     @pytest.mark.order(3)
     def test_all_report_dashboard_header_title(self):
         try:
+            self.test_initializer()
             header = self.utils.wait_and_get_element(self.driver, locators.report_header, by=By.XPATH)
             actual_font_size = self.utils.get_property_using_js(self.driver, header, 'font-size')
-            actual_font_size = str(int(actual_font_size.replace('px', ''))*72/96) + 'pts'
+            actual_font_size = str(int(int(actual_font_size.replace('px', '')) * 72 / 96)) + 'pts'
             actual_font_family = self.utils.get_property_using_js(self.driver, header, 'font-family')
             actual_color = self.utils.get_property_using_js(self.driver, header, 'color')
             actual_color = Color.from_string(actual_color).hex
@@ -147,7 +199,7 @@ class ReportTester(unittest.TestCase):
             self.validate_result('Report dashboard header Relative Y location', 24, int(header_y - vc_container_y))
             self.validate_result('Report dashboard header height', 58, int(header_height))
 
-            assert self.validations_failed_count == 0
+            # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
@@ -162,25 +214,52 @@ class ReportTester(unittest.TestCase):
     @pytest.mark.order(4)
     def test_border_and_shadow_of_visuals(self):
         try:
+            self.test_initializer()
             visuals = self.driver.find_elements_by_xpath(locators.visuals)
             for index, visual in enumerate(visuals):
-                visual_title = visual.find_element_by_xpath('.//div[contains(@class,"visualTitle")]')
+
                 container = visual.find_element_by_xpath('.//div[contains(@class, "vcBody")]')
 
                 border_color = container.value_of_css_property('border-color')
-                border_color = Color.from_string(border_color).hex
+                border_color = Color.from_string(border_color).hex.upper()
 
                 box_shadow = container.value_of_css_property('box-shadow')
                 pattern = 'rgba\((\d+),\s(\d+),\s(\d+).*'
-                rgb = re.search(pattern, box_shadow)
-                box_shadow = f'rgb({rgb.group(1)},{rgb.group(2)},{rgb.group(3)})'
-                box_shadow_color = Color.from_string(box_shadow).hex
+                if re.match(pattern, box_shadow):
+                    rgb = re.search(pattern, box_shadow)
+                    box_shadow = f'rgb({rgb.group(1)},{rgb.group(2)},{rgb.group(3)})'
+                    box_shadow_color = Color.from_string(box_shadow).hex.upper()
+                else:
+                    box_shadow_color = box_shadow
 
                 background_color = self.utils.get_property_using_js(self.driver, visual, 'background-color')
-                background_color = Color.from_string(background_color).hex
+                background_color = Color.from_string(background_color).hex.upper()
 
-                visual_title_color = visual_title.value_of_css_property('color')
-                visual_title_color = Color.from_string(visual_title_color).hex
+                self.validate_result(f'Visual - {index + 1} [verify visual border radius]', '12px',
+                                     container.value_of_css_property('border-radius'))
+                self.validate_result(f'Visual - {index + 1} [verify visual border color]', '#576975', border_color)
+                self.validate_result(f'Visual - {index + 1} [verify visual border shadow color]', '#B3B3B3',
+                                     box_shadow_color)
+                self.validate_result(f'Visual - {index + 1} [verify visual background color]', '#FBFBFB',
+                                     background_color)
+
+                # visual headers are off for buttons, slicers and report title
+                visual_titles = visual.find_elements_by_xpath('.//div[contains(@class,"visualTitle")]')
+                if len(visual_titles) > 0:
+                    visual_title = visual_titles[0]
+                    visual_title_color = visual_title.value_of_css_property('color')
+                    visual_title_color = Color.from_string(visual_title_color).hex
+                    font_size = visual_title.value_of_css_property('font-size')
+                    if 'px' in font_size:
+                        font_size = self.utils.pixel_to_pts(font_size)
+                    self.validate_result(f'Visual - {index + 1} [verify visual title font size]', '14pt',
+                                         font_size)
+                    self.validate_result(f'Visual - {index + 1} [verify visual title font family]', 'GT America',
+                                         self.utils.get_property_using_js(self.driver, visual_title, 'font-family'))
+                    self.validate_result(f'Visual - {index + 1} [verify visual title color]', '#252423',
+                                         visual_title_color)
+                    self.validate_result(f'Visual - {index + 1} [verify visual title visibility]', 'visible',
+                                         visual_title.value_of_css_property('visibility'))
 
                 # assert visual_title.value_of_css_property('font-size') == '14pt', 'font size mismatched'
                 # assert visual_title.value_of_css_property('font-family') == 'GT America', 'font family mis-match'
@@ -191,22 +270,7 @@ class ReportTester(unittest.TestCase):
                 # assert border_color == '#576975'
                 # assert box_shadow_color == '#B3B3B3', 'box shadow mis-match'
                 # assert background_color == '#FBFBFB', 'background color mis-match'
-
-                self.validate_result(f'Visual - {index + 1} [verify visual title font size]', '14pt',
-                                     visual_title.value_of_css_property('font-size'))
-                self.validate_result(f'Visual - {index + 1} [verify visual title font family]', 'GT America',
-                                     self.utils.get_property_using_js(self.driver, visual_title, 'font-family'))
-                self.validate_result(f'Visual - {index + 1} [verify visual title color]', '#252423', visual_title_color)
-                self.validate_result(f'Visual - {index + 1} [verify visual title visibility]', 'visible',
-                                     visual_title.value_of_css_property('visibility'))
-                self.validate_result(f'Visual - {index + 1} [verify visual border radius]', '12px',
-                                     container.value_of_css_property('border-radius'))
-                self.validate_result(f'Visual - {index + 1} [verify visual border color]', '#576975', border_color)
-                self.validate_result(f'Visual - {index + 1} [verify visual border shadow color]', '#B3B3B3',
-                                     box_shadow_color)
-                self.validate_result(f'Visual - {index + 1} [verify visual background color]', '#FBFBFB',
-                                     background_color)
-            assert self.validations_failed_count == 0
+            # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
@@ -222,6 +286,7 @@ class ReportTester(unittest.TestCase):
     @pytest.mark.order(5)
     def test_title_of_slicers_on_the_top(self):
         try:
+            self.test_initializer()
             slicers = self.driver.find_elements_by_css_selector(locators.slicers)
             for index, slicer in enumerate(slicers):
                 slicer_header_title = slicer.find_element_by_class_name('slicer-header-text')
@@ -246,7 +311,7 @@ class ReportTester(unittest.TestCase):
                 self.validate_result(f'Slicer - {index + 1} [verify slicer header visibility]', 'visible',
                                      slicer_header_visibility)
 
-            assert self.validations_failed_count == 0
+            # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
@@ -259,6 +324,7 @@ class ReportTester(unittest.TestCase):
     @pytest.mark.order(6)
     def test_multiselect_for_slicers_on_the_top(self):
         try:
+            self.test_initializer()
             slicers = self.driver.find_elements_by_css_selector(locators.slicers)
             for index, slicer in enumerate(slicers):
                 # Test if multiple selection is ON
@@ -321,7 +387,7 @@ class ReportTester(unittest.TestCase):
                     slicer_checkboxes[index_item1].click()
                     time.sleep(2)
 
-            assert self.validations_failed_count == 0
+            # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
@@ -331,16 +397,19 @@ class ReportTester(unittest.TestCase):
     @pytest.mark.order(7)
     def test_tear_down(self):
         try:
-            self.driver.close()
+            self.test_initializer()
+            self.utils.kill_browser_instance()
             self.reporter.save_report()
 
-            assert self.validations_failed_count == 0
+            # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
             self.validate_result('Closing the browser', 'browser should be closed without any error', 'error occurred',
                                  f'error : {error.__repr__()}')
 
+    def exit_browser(self):
+        self.utils.kill_browser_instance()
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()

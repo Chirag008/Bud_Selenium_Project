@@ -105,7 +105,8 @@ class CommonScript(unittest.TestCase):
             self.test_initializer()
 
             # wait for report to display
-            locator_report_title = "//span[normalize-space(text()) = '" + self.report_title + "'][not(ancestor::ul)]"
+            # locator_report_title = "//span[normalize-space(text()) = '" + self.report_title + "'][not(ancestor::ul)]"
+            locator_report_title = locators.report_title
             ele_report_title = self.utils.wait_and_get_element(
                 driver=self.driver,
                 locator=locator_report_title,

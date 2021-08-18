@@ -12,3 +12,4 @@ visuals = "//div[contains(@class, 'visualContainer') and not(@aria-label='Power 
 slicers = ".visual.visual-slicer"  # css selector
 slicer_dropdown_popup = ".slicer-dropdown-popup.visual"  # css selector
 slicer_checkboxes = "slicerCheckbox"  # class name
+report_title = "//div[@role='application']//div[@focus-nav-mode='Group']//span[@class='textRun'][1]"

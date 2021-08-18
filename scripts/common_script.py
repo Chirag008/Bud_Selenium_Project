@@ -6,14 +6,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.color import Color
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-import locators
-import creds
-import properties as config
+from helper import locators
+from helper import creds
 import time
 from scripts.commons import Common_Utils
-import allure
 from reporter.HtmlReporter import HtmlReporter
-
 
 class CommonScript(unittest.TestCase):
     # utils = Common_Utils()
@@ -117,14 +114,9 @@ class CommonScript(unittest.TestCase):
             # waiting for report to appear on page
             # time.sleep(5)
             print('report title is - {}'.format(ele_report_title.text))
-            # assert ele_report_title.text.strip() == config.report_title, 'Report title not matched!'
 
-            self.validate_result('Validate report title', config.home_equity_report_title,
+            self.validate_result('Validate report title', self.report_title,
                                  ele_report_title.text.strip())
-
-            with allure.step('Capturing screenshot'):
-                allure.attach(self.driver.get_screenshot_as_png(), name='Screenshot',
-                              attachment_type=allure.attachment_type.PNG)
             # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
@@ -145,8 +137,6 @@ class CommonScript(unittest.TestCase):
 
             # E7EAEC  -- (231, 234, 236)
             expected_background_color = '#E7EAEC'
-            # with allure.step('Verifying background color of report'):
-            #     assert actual_background_color == expected_background_color, 'Report background color mismatched!'
             self.validate_result('Report Background Color Validation', expected_background_color,
                                  actual_background_color)
 
@@ -155,8 +145,6 @@ class CommonScript(unittest.TestCase):
             actual_transparency = 1 - int(self.utils.get_property_using_js(driver=self.driver, element=element,
                                                                            property_name='opacity'))
             actual_transparency = f'{actual_transparency}%'
-            # with allure.step('Verifying opacity / transparency of background'):
-            #     assert actual_transparency == expected_transparency, 'Transparency value mismatched'
             self.validate_result('Verifying opacity / transparency of Report background', expected_transparency,
                                  actual_transparency)
             # assert self.validations_failed_count == 0
@@ -184,13 +172,6 @@ class CommonScript(unittest.TestCase):
             header_x = header.location['x']
             header_y = header.location['y']
             header_height = header.size['height']
-
-            # assert actual_font_family == 'GT America', 'Font family mismatched!'
-            # assert actual_font_size == '24px', 'Font size mismatched!'
-            # assert actual_color == '#252423', 'color mismatched!'
-            # assert int(header_x) == 24, 'Header X coordinate mismatched!'
-            # assert int(header_y) == 24, 'Header Y coordinate mismatched!'
-            # assert int(header_height) == '58', 'Header height mismatched!'
 
             self.validate_result('Report dashboard header title font family', 'GT America', actual_font_family)
             self.validate_result('Report dashboard header title font size', '24pts', actual_font_size)
@@ -260,16 +241,6 @@ class CommonScript(unittest.TestCase):
                                          visual_title_color)
                     self.validate_result(f'Visual - {index + 1} [verify visual title visibility]', 'visible',
                                          visual_title.value_of_css_property('visibility'))
-
-                # assert visual_title.value_of_css_property('font-size') == '14pt', 'font size mismatched'
-                # assert visual_title.value_of_css_property('font-family') == 'GT America', 'font family mis-match'
-                # assert visual_title_color == '#252423', 'visual title color mis-match'
-                # assert visual_title.value_of_css_property('visibility') == 'visible', 'header title visibility'
-                #
-                # assert container.value_of_css_property('border-radius') == '12px'
-                # assert border_color == '#576975'
-                # assert box_shadow_color == '#B3B3B3', 'box shadow mis-match'
-                # assert background_color == '#FBFBFB', 'background color mis-match'
             # assert self.validations_failed_count == 0
         except Exception as error:
             if isinstance(error, AssertionError):
@@ -297,10 +268,6 @@ class CommonScript(unittest.TestCase):
                 slicer_header_font_size = slicer_header_title.value_of_css_property('font-size')
                 slicer_header_visibility = self.utils.get_property_using_js(self.driver, slicer_header_title,
                                                                             'visibility')
-                # assert slicer_header_color == '#252423'
-                # assert slicer_header_font_size == '12px'
-                # assert slicer_header_font == 'GT America'
-                # assert slicer_header_visibility == 'visible'
 
                 self.validate_result(f'Slicer - {index + 1} [verify slicer header color]', '#252423',
                                      slicer_header_color)
@@ -372,12 +339,6 @@ class CommonScript(unittest.TestCase):
                     multiselect_with_control = 'ON'
                 else:
                     multiselect_with_control = 'OFF'
-                #
-                # assert chkbox_1_status == True
-                # assert chkbox_2_status == True
-                # with allure.step('Capturing screenshot with multiple selections'):
-                #     allure.attach(self.driver.get_screenshot_as_png(), name='Screenshot',
-                #                   attachment_type=allure.attachment_type.PNG)
 
                 self.validate_result(f'Slicer {index + 1} - [Validate multiselect with Control Key]', 'ON',
                                      multiselect_with_control)

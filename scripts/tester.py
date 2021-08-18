@@ -5,7 +5,8 @@ from scripts.common_script import CommonScript
 
 
 def start_execution():
-    with open('../reports_to_test.json') as in_fh:
+
+    with open('reports_to_test.json') as in_fh:
         reports_to_execute = json.load(in_fh)
         for report_data in reports_to_execute['reports']:
             url = report_data['url']

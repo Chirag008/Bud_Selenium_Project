@@ -50,8 +50,8 @@ class HtmlReporter:
         current_row = f'\n<tr class="{class_name}">\n' \
                       f'<td>{self.scenario_number}</td>\n' \
                       f'<td>{scenario_name}</td>\n' \
-                      f'<td>{expected_result}</td>\n' \
-                      f'<td>{actual_result}</td>\n' \
+                      f'<td><pre>{expected_result}</pre></td>\n' \
+                      f'<td><pre>{actual_result}</pre></td>\n' \
                       f'<td class="{class_name}">{status}</td>\n' \
                       f'<td>{comment}</td>\n' \
                       f'</tr>\n'

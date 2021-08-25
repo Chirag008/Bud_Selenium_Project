@@ -2,14 +2,9 @@
 
   "reports": [
     {
-      "url" : "file:///C:/Users/Chirag/Downloads/morereports/CUAI - Home Equity Analysis - Power BI.html",
-      "title": "Home Equity Analysis",
-      "automation_report_name": "Automation Report -- CUAI Home Equity Analysis.html"
-    },
-    {
-      "url" : "file:///C:/Users/Chirag/Downloads/morereports/CULI - Balance Dashboard & Tabular Report - Power BI.html",
-      "title": "Balance & Account",
-      "automation_report_name": "Automation Report -- Balance Dashboard And Tabular Report.html"
+      "url" : "https://app.powerbi.com/groups/me/reports/207f41b3-49a5-455c-819d-b409da299a97/ReportSectionf62b93eb2ba9088492c0",
+      "title": "Delinquency Report 60+",
+      "automation_report_name": "Automation Report -- Delinquency Report 60+.html"
     }
 
   ]

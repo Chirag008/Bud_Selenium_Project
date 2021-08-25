@@ -68,6 +68,8 @@ class CommonScript(unittest.TestCase):
                 self.test_border_and_shadow_of_visuals()
                 self.test_title_of_slicers_on_the_top()
                 self.test_multiselect_for_slicers_on_the_top()
+                self.test_table_matrix()
+                self.test_table_matrix_data()
                 self.reporter.save_report()
             self.exit_browser()
         else:
@@ -77,25 +79,27 @@ class CommonScript(unittest.TestCase):
             self.test_border_and_shadow_of_visuals()
             self.test_title_of_slicers_on_the_top()
             self.test_multiselect_for_slicers_on_the_top()
+            self.test_table_matrix()
+            self.test_table_matrix_data()
             self.test_tear_down()
 
     def login_and_load_report_page(self):
-        # self.driver.get(self.url)
+        self.driver.get(self.url)
         self.driver.maximize_window()
-        #
-        # # sign in to PowerBi account
-        # time.sleep(2)
-        # self.driver.find_element_by_xpath(locators.sign_in_button).click()
-        # time.sleep(2)
-        # self.driver.find_element_by_xpath(locators.sign_in_email_box).send_keys(creds.username)
-        # time.sleep(2)
-        # self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
-        # time.sleep(2)
-        # self.driver.find_element_by_xpath(locators.sign_in_password_box).send_keys(creds.password)
-        # time.sleep(2)
-        # self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
-        # time.sleep(2)
-        #
+
+        # sign in to PowerBi account
+        time.sleep(2)
+        self.driver.find_element_by_xpath(locators.sign_in_button).click()
+        time.sleep(2)
+        self.driver.find_element_by_xpath(locators.sign_in_email_box).send_keys(creds.username)
+        time.sleep(2)
+        self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
+        time.sleep(2)
+        self.driver.find_element_by_xpath(locators.sign_in_password_box).send_keys(creds.password)
+        time.sleep(2)
+        self.driver.find_element_by_xpath(locators.sign_in_next_button).click()
+        time.sleep(2)
+
         # # launch url again to go to report page
         self.driver.get(self.url)
 
@@ -106,14 +110,15 @@ class CommonScript(unittest.TestCase):
 
             # wait for report to display
             # locator_report_title = "//span[normalize-space(text()) = '" + self.report_title + "'][not(ancestor::ul)]"
+            # waiting for report to appear on page
+            time.sleep(5)
+
             locator_report_title = locators.report_title
             ele_report_title = self.utils.wait_and_get_element(
                 driver=self.driver,
                 locator=locator_report_title,
-                timeout=2
+                timeout=20
             )
-            # waiting for report to appear on page
-            # time.sleep(5)
             print('report title is - {}'.format(ele_report_title.text))
 
             self.validate_result('Validate report title', self.report_title,
@@ -122,7 +127,7 @@ class CommonScript(unittest.TestCase):
         except Exception as error:
             if isinstance(error, AssertionError):
                 raise error
-            self.validate_result('Validating report tile ', self.report_title, 'NA',
+            self.validate_result('Validating report title ', self.report_title, 'NA',
                                  f'Error occurred  : {error.__repr__()}')
 
     @pytest.mark.order(2)
@@ -161,7 +166,7 @@ class CommonScript(unittest.TestCase):
             self.test_initializer()
             header = self.utils.wait_and_get_element(self.driver, locators.report_header, by=By.XPATH)
             actual_font_size = self.utils.get_property_using_js(self.driver, header, 'font-size')
-            actual_font_size = str(int(int(actual_font_size.replace('px', '')) * 72 / 96)) + 'pts'
+            actual_font_size = str(int(float(actual_font_size.replace('px', '')) * 72 / 96)) + 'pts'
             actual_font_family = self.utils.get_property_using_js(self.driver, header, 'font-family')
             actual_color = self.utils.get_property_using_js(self.driver, header, 'color')
             actual_color = Color.from_string(actual_color).hex
@@ -304,6 +309,10 @@ class CommonScript(unittest.TestCase):
                 slicer_first_element = slicer_popup.find_elements_by_css_selector('.slicerText')[0]
                 slicer_first_element_text = slicer_first_element.get_attribute('title')
                 slicer_checkboxes = slicer_popup.find_elements_by_class_name(locators.slicer_checkboxes)
+                if len(slicer_checkboxes) == 1:
+                    print(f'can not check multiple selections because no of options in select box - {len(slicer_checkboxes)})')
+                    assert True
+                    continue
                 if slicer_first_element_text.lower() == 'select all':
                     if len(slicer_checkboxes) < 3:
                         print('can not check multiple selections (few elements)')
@@ -356,7 +365,131 @@ class CommonScript(unittest.TestCase):
             self.validate_result('Validating multiselect with CTRL is On in slicer', 'ON', 'NA',
                                  f'Error occurred  : {error.__repr__()}')
 
+
     @pytest.mark.order(7)
+    def test_table_matrix(self):
+        try:
+            matrix_tables = self.driver.find_elements_by_xpath(locators.table_matrix)
+            for index, matrix in enumerate(matrix_tables):
+                visualBody = matrix.find_element_by_xpath(".//div[contains(@class, 'vcBody')]")
+
+                # grid outline color
+                grid_outline_color = visualBody.value_of_css_property('border-color')
+                grid_outline_color = Color.from_string(grid_outline_color).hex.upper()
+                self.validate_result(f'Matrix [{index+1}] - Validate matrix grid outline color', '#9BA7AE',
+                                     grid_outline_color)
+
+
+                # grid shadow color
+                grid_shadow = visualBody.value_of_css_property('box-shadow')
+                pattern = 'rgba\((\d+),\s(\d+),\s(\d+).*'
+                if re.match(pattern, grid_shadow):
+                    rgb = re.search(pattern, grid_shadow)
+                    grid_shadow = f'rgb({rgb.group(1)},{rgb.group(2)},{rgb.group(3)})'
+                    grid_shadow_color = Color.from_string(grid_shadow).hex.upper()
+                else:
+                    grid_shadow_color = grid_shadow
+                self.validate_result(f'Matrix [{index+1}] - Validate matrix grid shadow color', '#B3B3B3',
+                                     grid_shadow_color)
+
+
+                # grid columns
+                column_header_div = visualBody.find_element_by_xpath(".//div[@class='columnHeaders']")
+                columns_headers = column_header_div.find_elements_by_xpath(".//div[@title]")
+                ch = columns_headers[0]
+                column_header_font_color = self.utils.get_property_using_js(self.driver, ch, 'color')
+                column_header_font_color = Color.from_string(column_header_font_color).hex.upper()
+                column_header_font_family = self.utils.get_property_using_js(self.driver, ch, 'font-family')
+                column_header_font_size = self.utils.get_property_using_js(self.driver, ch, 'font-size')
+                column_header_text_alignment = self.utils.get_property_using_js(self.driver, ch, 'text-align')
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid column header font color', '#576975',
+                                     column_header_font_color)
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid column header font family',
+                                     'GT America', column_header_font_family)
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid column header font size', '11pt',
+                                     column_header_font_size)
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid column header text alignment',
+                                     'Left', column_header_text_alignment)
+
+                # grid rows
+                row_header_div = visualBody.find_element_by_xpath(".//div[@class='rowHeaders']")
+                row_headers = row_header_div.find_elements_by_xpath(".//div[@title]")
+                rh = row_headers[0]
+                row_header_font_color = self.utils.get_property_using_js(self.driver, rh, 'color')
+                row_header_font_color = Color.from_string(row_header_font_color).hex.upper()
+                row_header_font_family = self.utils.get_property_using_js(self.driver, rh, 'font-family')
+                row_header_font_size = self.utils.get_property_using_js(self.driver, rh, 'font-size')
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid row header font color', '#252423',
+                                     row_header_font_color)
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid row header font family',
+                                     'GT America', row_header_font_family)
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid row header font size', '10pt',
+                                     row_header_font_size)
+
+                # values
+                table_data_div = visualBody.find_element_by_xpath(".//div[@class='bodyCells']")
+                value_div = table_data_div.find_element_by_xpath('.//div[@title]')
+                value_font_color = self.utils.get_property_using_js(self.driver, value_div, 'color')
+                value_font_color = Color.from_string(value_font_color).hex.upper()
+                value_font_family = self.utils.get_property_using_js(self.driver, value_div, 'font-family')
+                value_font_size = self.utils.get_property_using_js(self.driver, value_div, 'font-size')
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid value cell font color', '#252423',
+                                     value_font_color)
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid value cell font family',
+                                     'GT America', value_font_family)
+                self.validate_result(f'Matrix [{index + 1}] - Validate matrix grid value cell font size', '9pt',
+                                     value_font_size)
+
+        except Exception as error:
+            if isinstance(error, AssertionError):
+                raise error
+            self.validate_result('Validating Grid Matrix column, row and value cells', 'No Error', 'Error',
+                                 f'Error occurred  : {error.__repr__()}')
+
+
+    def test_table_matrix_data(self):
+        try:
+            time.sleep(10)
+            matrix_tables = self.driver.find_elements_by_xpath(locators.table_matrix)
+            for index, matrix in enumerate(matrix_tables):
+                visualBody = matrix.find_element_by_xpath(".//div[contains(@class, 'vcBody')]")
+                print(f'==================   Traversing the data for matrix table -- {index+1}  =========================')
+                # grid columns
+                column_header_div = visualBody.find_element_by_xpath(".//div[@class='columnHeaders']")
+                columns_headers = column_header_div.find_elements_by_xpath(".//div[@title]")
+                print(f'\n******************  Column Headers ******************')
+                for index, column_header in enumerate(columns_headers):
+                    print(f'{index+1}. {column_header.text}')
+
+
+                # grid rows
+                row_header_div = visualBody.find_element_by_xpath(".//div[@class='rowHeaders']")
+                row_headers = row_header_div.find_elements_by_xpath(".//div[@title]")
+                print(f'\n******************  Row Headers ******************')
+                for index, row_header in enumerate(row_headers):
+                    print(f'{index + 1}. {row_header.text}')
+
+
+                # values
+                table_data_div = visualBody.find_element_by_xpath(".//div[@class='bodyCells']")
+                table_column_data_divs = table_data_div.find_elements_by_xpath(".//div[contains(@style, 'overflow:hidden')]")
+                print('\n******************* Values in Cells *********************')
+                for index, column_data_div in enumerate(table_column_data_divs):
+                    print(f'Column {index+1} data ', end=' --> ')
+                    value_divs = column_data_div.find_elements_by_xpath('.//div[@title]')
+                    for value_div in value_divs:
+                        print(f'  {value_div.text}  ', end='|')
+                    print('\n')
+
+                print('=======================================================================\n\n')
+        except Exception as error:
+            if isinstance(error, AssertionError):
+                raise error
+            self.validate_result('Validating Grid Values, row and value cells', 'No Error', 'Error',
+                                 f'Error occurred  : {error.__repr__()}')
+
+
+    @pytest.mark.order(8)
     def test_tear_down(self):
         try:
             self.test_initializer()

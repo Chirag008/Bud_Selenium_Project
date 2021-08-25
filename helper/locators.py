@@ -13,3 +13,4 @@ slicers = ".visual.visual-slicer"  # css selector
 slicer_dropdown_popup = ".slicer-dropdown-popup.visual"  # css selector
 slicer_checkboxes = "slicerCheckbox"  # class name
 report_title = "//div[@role='application']//div[@focus-nav-mode='Group']//span[@class='textRun'][1]"
+table_matrix = "//div[@aria-roledescription='Matrix']"

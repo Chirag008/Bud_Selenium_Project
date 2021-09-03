@@ -89,8 +89,22 @@ class CommonScript(unittest.TestCase):
 
         # sign in to PowerBi account
         time.sleep(2)
-        self.driver.find_element_by_xpath(locators.sign_in_button).click()
+        sign_in_btn = self.utils.wait_and_get_element(driver=self.driver, locator=locators.sign_in_button, timeout=20)
+        first_window_handle = self.driver.current_window_handle
+        sign_in_btn.click()
         time.sleep(2)
+        if len(self.driver.window_handles) == 2:
+            print('found new window on click of sing in button. So switching the new window ... !')
+            # switch to the next tab / window
+            window_handles = self.driver.window_handles
+            for wh in window_handles:
+                if wh != first_window_handle:
+                    self.driver.switch_to.window(wh)
+                    time.sleep(1)
+                    break
+            # check if current window is the required window
+            if self.driver.current_window_handle != first_window_handle:
+                print('successfully switched to new window. Proceeding with sign in process ...')
         self.driver.find_element_by_xpath(locators.sign_in_email_box).send_keys(creds.username)
         time.sleep(2)
         self.driver.find_element_by_xpath(locators.sign_in_next_button).click()

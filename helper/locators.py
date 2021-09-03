@@ -1,4 +1,4 @@
-sign_in_button = "//span[text()='Sign in to your account']/parent::a"
+sign_in_button = "//span[text()='Sign in to your account' or text()='Sign in']/parent::a"
 sign_in_email_box = "//*[@id='i0116']"
 sign_in_password_box = "//*[@id='i0118']"
 sign_in_next_button = "//*[@id='idSIButton9']"
